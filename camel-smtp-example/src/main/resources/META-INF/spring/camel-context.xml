@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+  
+   <propertyPlaceholder id="properties" location="mail.properties"/>
+  
+   <route>
+   		<from uri="timer://sendEmail?repeatCount=1"/>
+        <setHeader headerName="from">
+            <simple>{{email.from}}</simple>
+        </setHeader>
+        <setHeader headerName="to">
+            <simple>{{email.to}}</simple>
+        </setHeader>
+        <setHeader headerName="subject">
+            <constant>Hello</constant>
+        </setHeader>
+        <setHeader headerName="contentType">
+            <constant>text/plain;charset=UTF-8</constant>
+        </setHeader>
+        <setBody>
+            <constant>Test</constant>
+        </setBody>
+		<to uri="{{email.uri}}"/>
+    </route>
+  </camelContext>
+
+</beans>
